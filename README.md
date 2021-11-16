@@ -1,5 +1,5 @@
 # olimp2021-1etp
-```shell
+```console
 ./compile uzduotis-jau_Versija
 ./test uzduotis-jau_Versija
 ```
