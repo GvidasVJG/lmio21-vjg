@@ -1,0 +1,4 @@
+#!/bin/bash
+
+foldname=$(echo $1 | sed 's/\(.*\)_.*/\1/')
+g++ -std=c++11 "$foldname"/$1.cpp -o $foldname/$1 && chmod +x $foldname/$1

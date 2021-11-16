@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+
+import os
+import sys
+
+progname = sys.argv[1]
+
+foldname = progname.split('_')[0]
+testno = int(os.popen('ls {foldname}/{foldname}_tests | wc -l'.format(foldname=foldname)).read())//2
+if len(sys.argv) > 2:
+    testno = int(sys.argv[2])
+
+for i in range(testno):
+    no = i+1
+    ans = os.popen('cat {foldname}/{foldname}_tests/{foldname}.{no}.in | {foldname}/{pname}'.format(pname=progname, no=str(no).zfill(2), foldname=foldname)).read()
+    sol = os.popen('cat {foldname}/{foldname}_tests/{foldname}.{no}.sol'.format(foldname=foldname, no=str(no).zfill(2))).read()
+
+    if int(ans) == int(sol):
+        print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    else:
+        print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
