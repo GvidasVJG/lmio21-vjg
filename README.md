@@ -5,7 +5,7 @@ Testavimui reikalingas python3
 ./test uzduotis-jau_Versija
 ```
 Testavimas ant WSL & VSCode / kokio nors kito IDE
-```
+```console
 dos2unix uzduotis-jau/uzduotis-jau_Versija.cpp
 dos2unix compile
 dos2unix test
