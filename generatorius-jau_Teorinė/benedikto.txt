@@ -1,0 +1,17 @@
+*neskaiciau sprendimo :)*
+
+1. 999 999 999 999 999 999 999 999
+galima eiti nuo ceturbo iki unurbo pakartotinai (24 kartus)
+
+2. 1111111111111111111111111
+neimanoma, nes 25/2 < 0
+
+3. 
+neimanoma, nes 4 nera tiesiogai sujungta su 11
+
+4.
+galima,
+ceturbo - kvaturbo - ceturbo - untero - ceturbo - oktero - ceturbo - durbo - ceturbo
+
+5.
+neimanoma, nes nuo tretero neimanoma atsirasti prie unurbo, ceturbo arba treurbo
