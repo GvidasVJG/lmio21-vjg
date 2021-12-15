@@ -8,4 +8,4 @@ version = sys.argv[2]
 
 foldname = os.popen('find . -type d -name \"{progname}\"'.format(progname=progname)).read().replace("\n","")
 
-os.popen('g++ -std=c++11 {foldname}/{progname}_{version}.cpp -o {foldname}/bin/{progname}_{version} && chmod +x {foldname}/bin/{progname}_{version}'.format(foldname=foldname, progname=progname, version=version))
+os.popen('mkdir {fodlname}/bin && g++ -std=c++11 {foldname}/{progname}_{version}.cpp -o {foldname}/bin/{progname}_{version} && chmod +x {foldname}/bin/{progname}_{version}'.format(foldname=foldname, progname=progname, version=version))
