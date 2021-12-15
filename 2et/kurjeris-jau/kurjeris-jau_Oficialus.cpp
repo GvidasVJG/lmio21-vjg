@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 
 // Dienos pradžioje kurjeriai nedirba
 int dirba_iki_1 = 0, dirba_iki_2 = 0;
