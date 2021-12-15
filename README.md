@@ -3,7 +3,7 @@
 [Python3](https://www.python.org/download/releases/3.0/)
 
 ---
-## Naudojimas:
+## Naudojimas
 ```console
 ./compile uzduotis Versija
 ./test uzduotis Versija [testo#]
