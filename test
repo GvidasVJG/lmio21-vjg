@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+
+import os
+import sys
+
+progname = sys.argv[1]
+version = sys.argv[2]
+
+foldname = os.popen('find . -type d -name \"{progname}\"'.format(progname=progname)).read().replace("\n","")
+testfolder = '{foldname}/{progname}_tests'.format(foldname=foldname, progname=progname)
+testno = int(os.popen('ls {testfolder} | wc -l'.format(testfolder=testfolder)).read())//2
+onetest = False
+if len(sys.argv) > 3:
+    testno = int(sys.argv[3])
+    onetest = True
+
+if not onetest:
+    for i in range(testno):
+        no = i+1
+        ans = os.popen('cat {testfolder}/{pname}.{testno}.in | {foldname}/bin/{pname}_{version}'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname)).read()
+        sol = os.popen('cat {testfolder}/{pname}.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2))).read()
+
+        if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+        else:
+            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+else:
+    ans = os.popen('cat {testfolder}/{pname}.{testno}.in | {foldname}/bin/{pname}_{version}'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname)).read()
+    sol = os.popen('cat {testfolder}/{pname}.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2))).read()
+
+    if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    else:
+        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
