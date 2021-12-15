@@ -3,20 +3,20 @@ Testavimui reikalingas python3
 
 Naudojimas:
 ```console
-./compile uzduotis-jau Versija
-./test uzduotis-jau Versija [testo#]
+./compile uzduotis Versija
+./test uzduotis Versija [testo#]
 ```
 Galima kompiliuoti ir testuoti viena komanda:
 ```console
-./comptest uzduotis-jau Versija [testo#]
+./comptest uzduotis Versija [testo#]
 ```
 
 Pavyzdžiui
 ```console
-./compile rogutes-jau Oficialus
-./test rogutes-jau Oficialus
+./compile rogutes Oficialus
+./test rogutes Oficialus
 ```
 arba
 ```console
-./comptest rogutes-jau Oficialus
+./comptest rogutes Oficialus
 ```
