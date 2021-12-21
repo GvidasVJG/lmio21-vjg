@@ -18,5 +18,5 @@ int main(){
     for(int l = 0; l < e.length(); ++l){
         std::cout << dict[e[l]];
     }
-    std::cout << endl;
+    std::cout << std::endl;
 }
