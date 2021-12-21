@@ -16,6 +16,7 @@ int main(){
     std::string e;
     std::cin >> e;
     for(int l = 0; l < e.length(); ++l){
-        std::cout << dict[e[l]] << std::endl;
+        std::cout << dict[e[l]];
     }
+    std::cout << endl;
 }
