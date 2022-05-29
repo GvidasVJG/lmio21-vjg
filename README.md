@@ -5,19 +5,21 @@
 ---
 ## Naudojimas
 ```console
-./compile uzduotis Versija
-./test uzduotis Versija [testo#]
+./compile uzduotis-lyga Versija
+./test uzduotis-lyga Versija [testo#]
 ```
 Galima kompiliuoti ir testuoti viena komanda:
 ```console
-./comptest uzduotis Versija [testo#]
+./comptest uzduotis-lyga Versija [testo#]
 ```
 ## Pavyzdžiui
 ```console
-./compile rogutes Oficialus
-./test rogutes Oficialus
+./compile rogutes-jau Oficialus
+./test rogutes-jau Oficialus
 ```
 arba
 ```console
-./comptest rogutes Oficialus
+./comptest rogutes-jau Oficialus
 ```
+
+Galimos lygos jau, vyr
