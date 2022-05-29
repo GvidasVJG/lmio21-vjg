@@ -1,10 +1,238 @@
 #!/usr/bin/python3
 
+from operator import xor
 import os
 import sys
+import re
+# from tkinter.ttk import Style
+import colorama
+from colorama import Fore
 
-option = sys.argv[1]
-if option == 'all':
-    os.system('tree . -d -L 3')
-elif int(option) <= 2022 and int(option) >= 2018:
-    os.system('tree {year} -d -L 2'.format(year=option))
+def filt(a):
+    return os.path.isdir(a) and not os.path.basename(a) == '.git'
+
+def filt2(a):
+    return '.cpp' in os.path.basename(a)
+
+def print_error(message):
+    print(Fore.RED+message,file=sys.stderr)
+    exit()
+
+def unique_list(l):
+    ulist = []
+    [ulist.append(x) for x in l if x not in ulist]
+    return ulist
+
+available_years = list(filter(filt, os.listdir('.')))
+available_years.sort()
+latest = int(available_years[-1])
+oldest = int(available_years[0])
+
+list_options = {'type': 'all', 'year':'all', 'stage':'all'}
+
+options = [opt for opt in sys.argv]
+# print(options)
+options_str = ''
+for o in options:
+    options_str += o
+    options_str += ' '
+options_str = options_str.replace('tasks', '-T').replace('solutions', '-S').replace('all', '-A')
+options_str = options_str.replace('--year', '-y').replace('--stage','-s')
+
+options_str=' '.join(unique_list(options_str.split()))
+# print(options_str)
+options = options_str.split(" ")
+
+# for op in options:
+
+
+is_t = '-T' in options
+is_s = '-S' in options
+is_a = '-A' in options
+cond1 = (is_t and not (is_a or is_s)) or (is_a and not (is_t or is_s)) or (is_s and not (is_a or is_t))
+# cond1 = is_t and not is_a or is_a and not is_t
+if cond1:
+    if is_t:
+        list_options['type'] = 'tasks'
+    elif is_s:
+        list_options['type'] = 'solutions'
+    elif is_a:
+        list_options['type'] = 'all'
+
+set_year = '-y' in options_str
+set_stage = '-s' in options_str
+set_version = '-v' in options_str
+
+if set_year:
+    year_str = options_str[options_str.find('-y')+3:options_str.find('-y')+7]
+    if year_str.isnumeric():
+        if int(year_str) <= latest and int(year_str) >= oldest:
+            list_options['year'] = int(year_str)
+        else:
+            print_error('Argument for year should be a year {}-{} or last'.format(oldest, latest))
+    elif year_str == 'last':
+        list_options['year'] = latest
+    else:
+        print_error('Argument for year should be a year {}-{} or last'.format(oldest, latest))
+
+if set_stage:
+    stage_str = options_str[options_str.find('-s')+3:options_str.find('-s')+3+1]
+    if stage_str.isnumeric():
+        if int(stage_str) >= 1 and int(stage_str) <= 3:
+            list_options['stage'] = int(stage_str)
+        else:
+            print_error('Argument for stage should be a number 1-3') 
+    else:
+        print_error('Argument for stage should be a number 1-3')
+
+if set_version:
+    print(options_str)
+    version_str = re.search(r'-v=(\w+)\s?', options_str)
+    if version_str:
+        version_str = version_str.group(1)
+    else:
+        print_error('Argument for version should be a string with no whitepaces')
+# print(version_str)
+# exit()
+
+if list_options['type'] == 'solutions':
+    sols = set()
+    years = list(filter(filt, os.listdir('.')))
+    for y in years:
+        # print(Fore.CYAN, y, '\n', end='', sep='')
+        stages = os.listdir('./{year}'.format(year=y))
+        for s in stages:
+            # print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+            tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+            for t in tasks:
+                print('', Fore.GREEN, t, '\n', end='', sep='')
+                solutions = os.listdir('./{year}/{stage}/{task}'.format(year=y, stage=s, task=t))
+                for sol in solutions:
+                    if sol.endswith('.cpp'):
+                        sols.add(sol.split('_')[1][:-4])
+                        print('  ', Fore.WHITE, sol.split('_')[1][:-4], '\n', end='', sep='')
+    # for s in sols:
+        # print(Fore.CYAN+s)
+    exit()
+
+if list_options['type'] == 'all':
+    if list_options['year'] == 'all':
+        if list_options['stage'] == 'all':
+            years = list(filter(filt, os.listdir('.')))
+            for y in years:
+                print(Fore.CYAN, y, '\n', end='', sep='')
+                stages = os.listdir('./{year}'.format(year=y))
+                for s in stages:
+                    print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+                    tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+                    for t in tasks:
+                        if not set_version:
+                            print('    ', Fore.GREEN, t, '\n', end='', sep='')
+                        solutions = os.listdir('./{year}/{stage}/{task}'.format(year=y, stage=s, task=t))
+                        printonce = True
+                        for sol in solutions:
+                            if sol.endswith('.cpp'):
+                                filenm = sol.split('_')[1][:-4]
+                                if set_version:
+                                    if version_str in filenm:
+                                        if printonce:
+                                            print('    ', Fore.GREEN, t, '\n', end='', sep='')
+                                        printonce = False
+                                        print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+                                else:
+                                    print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+        else:
+            years = list(filter(filt, os.listdir('.')))
+            for y in years:
+                print(Fore.CYAN, y, '\n', end='', sep='')
+                stages = os.listdir('./{year}'.format(year=y))
+                for s in stages:
+                    if int(s[0]) == list_options['stage']:
+                        print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+                        tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+                        for t in tasks:
+                            print('    ', Fore.GREEN, t, '\n', end='', sep='')
+                            solutions = os.listdir('./{year}/{stage}/{task}'.format(year=y, stage=s, task=t))
+                            for sol in solutions:
+                                if sol.endswith('.cpp'):
+                                    filenm = sol.split('_')[1][:-4]
+                                    if set_version:
+                                        if version_str in filenm:
+                                            print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+                                    else:
+                                        print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+    elif list_options['stage'] == 'all':
+        y = list_options['year']
+        print(Fore.CYAN, y, '\n', end='', sep='')
+        stages = os.listdir('./{year}'.format(year=y))
+        for s in stages:
+            print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+            tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+            for t in tasks:
+                print('    ', Fore.GREEN, t, '\n', end='', sep='')
+                solutions = os.listdir('./{year}/{stage}/{task}'.format(year=y, stage=s, task=t))
+                for sol in solutions:
+                    if sol.endswith('.cpp'):
+                        filenm = sol.split('_')[1][:-4]
+                        if set_version:
+                            if filenm == version_str:
+                                print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+                        else:
+                            print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+    else:
+        y = list_options['year']
+        print(Fore.CYAN, y, '\n', end='', sep='')
+        s = list_options['stage']
+        print('  ', Fore.YELLOW, s, 'et', '\n', end='', sep='')
+        tasks = os.listdir('./{year}/{stage}et'.format(year=y, stage=s))
+        for t in tasks:
+            print('    ', Fore.GREEN, t, '\n', end='', sep='')
+            solutions = os.listdir('./{year}/{stage}et/{task}'.format(year=y, stage=s, task=t))
+            for sol in solutions:
+                if sol.endswith('.cpp'):
+                    filenm = sol.split('_')[1][:-4]
+                    if set_version:
+                        if version_str in filenm:
+                            print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+                    else:
+                        print('      ', Fore.WHITE, filenm, '\n', end='', sep='')
+elif list_options['type'] == 'tasks':
+    if list_options['year'] == 'all':
+        if list_options['stage'] == 'all':
+            years = list(filter(filt, os.listdir('.')))
+            for y in years:
+                print(Fore.CYAN, y, '\n', end='', sep='')
+                stages = os.listdir('./{year}'.format(year=y))
+                for s in stages:
+                    print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+                    tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+                    for t in tasks:
+                        print('    ', Fore.GREEN, t, '\n', end='', sep='')
+        else:
+            years = list(filter(filt, os.listdir('.')))
+            for y in years:
+                print(Fore.CYAN, y, '\n', end='', sep='')
+                stages = os.listdir('./{year}'.format(year=y))
+                for s in stages:
+                    if int(s[0]) == list_options['stage']:
+                        print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+                        tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+                        for t in tasks:
+                            print('    ', Fore.GREEN, t, '\n', end='', sep='')
+    elif list_options['stage'] == 'all':
+        y = list_options['year']
+        print(Fore.CYAN, y, '\n', end='', sep='')
+        stages = os.listdir('./{year}'.format(year=y))
+        for s in stages:
+            print('  ', Fore.YELLOW, s, '\n', end='', sep='')
+            tasks = os.listdir('./{year}/{stage}'.format(year=y, stage=s))
+            for t in tasks:
+                print('    ', Fore.GREEN, t, '\n', end='', sep='')
+    else:
+        y = list_options['year']
+        print(Fore.CYAN, y, '\n', end='', sep='')
+        s = list_options['stage']
+        print('  ', Fore.YELLOW, s, 'et', '\n', end='', sep='')
+        tasks = os.listdir('./{year}/{stage}et'.format(year=y, stage=s))
+        for t in tasks:
+            print('    ', Fore.GREEN, t, '\n', end='', sep='')
