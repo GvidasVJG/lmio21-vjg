@@ -4,15 +4,16 @@ import sys
 from time import sleep
 from subprocess import run
 
-progname = sys.argv[1]
-version = sys.argv[2]
+year = sys.argv[1]
+progname = sys.argv[2]
+version = sys.argv[3]
 testno = 0
-if len(sys.argv) > 3:
-    testno = int(sys.argv[3])
+if len(sys.argv) > 4:
+    testno = int(sys.argv[4])
 
-run(['./compile', progname, version])
+run(['./compile', year, progname, version])
 sleep(1) #kažkodėl kartais klaidingai testuoja be palaukimo - galimai nesulaukia, kol įvykdys paskutinę komandą iki galo arba kažkas lieka stdin
 if testno > 0:
-    run(['./test', progname, version, str(testno)])
+    run(['./test', year, progname, version, str(testno)])
 else:
-    run(['./test', progname, version])
+    run(['./test', year, progname, version])
