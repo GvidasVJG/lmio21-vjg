@@ -1,0 +1,10 @@
+#!/usr/bin/python3
+
+import os
+import sys
+
+option = sys.argv[1]
+if option == 'all':
+    os.system('tree . -d -L 3')
+elif int(option) <= 2022 and int(option) >= 2018:
+    os.system('tree {year} -d -L 2'.format(year=option))

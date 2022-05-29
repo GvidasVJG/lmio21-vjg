@@ -3,12 +3,12 @@
 import os
 import sys
 
-year = sys.argv[1]
-progname = sys.argv[2].split('-')[0]
-progclass = sys.argv[2].split('-')[1]
-version = sys.argv[3]
+# year = sys.argv[1]
+progname = sys.argv[1].split('-')[0]
+progclass = sys.argv[1].split('-')[1]
+version = sys.argv[2]
 
-foldname = os.popen('find ./{year} -type d -name "{progname}-{progclass}"'.format(year=year, progname=progname, progclass=progclass)).read().replace("\n","")
+foldname = os.popen('find . -type d -name "{progname}-{progclass}"'.format(progname=progname, progclass=progclass)).read().replace("\n","")
 print(foldname)
-os.popen('mkdir')
+os.popen('mkdir -p {foldname}/bin && g++ -std=c++11 {foldname}/{progname}-{progclass}_{version}.cpp -o {foldname}/bin/{progname}-{progclass}_{version} && chmod +x {foldname}/bin/{progname}-{progclass}_{version}'.format(foldname=foldname, progname=progname, progclass=progclass, version=version))
 # os.popen('mkdir -p {foldname}/bin && g++ -std=c++11 {foldname}/{progname}-jau_{version}.cpp -o {foldname}/bin/{progname}-jau_{version} && chmod +x {foldname}/bin/{progname}-jau_{version}'.format(foldname=foldname, progname=progname, version=version))

@@ -1,35 +1,36 @@
-# #!/usr/bin/python3
+#!/usr/bin/python3
 
-# import os
-# import sys
+import os
+import sys
 
 # year = sys.argv[1]
-# progname = sys.argv[2].split('-')[0]
-# version = sys.argv[3]
+progname = sys.argv[1].split('-')[0]
+progclass = sys.argv[1].split('-')[1]
+version = sys.argv[2]
 
-# foldname = os.popen('find . -type d -name \"{progname}-jau\"'.format(progname=progname)).read().replace("\n","")
-# testfolder = '{foldname}/{progname}-jau_tests'.format(foldname=foldname, progname=progname)
-# testno = int(os.popen('ls {testfolder} | wc -l'.format(testfolder=testfolder)).read())//2
-# onetest = False
-# if len(sys.argv) > 3:
-#     testno = int(sys.argv[3])
-#     onetest = True
+foldname = os.popen('find . -type d -name \"{progname}-{progclass}\"'.format(progname=progname, progclass=progclass)).read().replace("\n","")
+testfolder = '{foldname}/{progname}-{progclass}_tests'.format(foldname=foldname, progname=progname, progclass=progclass)
+testno = int(os.popen('ls {testfolder} | wc -l'.format(testfolder=testfolder)).read())//2
+onetest = False
+if len(sys.argv) > 3:
+    testno = int(sys.argv[3])
+    onetest = True
 
-# if not onetest:
-#     for i in range(testno):
-#         no = i+1
-#         ans = os.popen('cat {testfolder}/{pname}-jau.{testno}.in | {foldname}/bin/{pname}-jau_{version}'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname)).read()
-#         sol = os.popen('cat {testfolder}/{pname}-jau.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2))).read()
+if not onetest:
+    for i in range(testno):
+        no = i+1
+        ans = os.popen('cat {testfolder}/{pname}-{progclass}.{testno}.in | {foldname}/bin/{pname}-{progclass}_{version}'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+        sol = os.popen('cat {testfolder}/{pname}-{progclass}.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2), progclass=progclass)).read()
 
-#         if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
-#             print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-#         else:
-#             print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
-# else:
-#     ans = os.popen('cat {testfolder}/{pname}-jau.{testno}.in | {foldname}/bin/{pname}-jau_{version}'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname)).read()
-#     sol = os.popen('cat {testfolder}/{pname}-jau.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2))).read()
+        if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+        else:
+            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+else:
+    ans = os.popen('cat {testfolder}/{pname}-{progclass}.{testno}.in | {foldname}/bin/{pname}-{progclass}_{version}'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+    sol = os.popen('cat {testfolder}/{pname}-{progclass}.{testno}.sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2), progclass=progclass)).read()
 
-#     if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
-#         print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-#     else:
-#         print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+    if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    else:
+        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
