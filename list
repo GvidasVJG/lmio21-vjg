@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+# Ši dalis nebaigta
+
 from operator import xor
 import os
 import sys

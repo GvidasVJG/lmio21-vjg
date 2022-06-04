@@ -2,13 +2,45 @@
 
 import os
 import sys
+import subprocess as sub
 
 # year = sys.argv[1]
-progname = sys.argv[1].split('-')[0]
-progclass = sys.argv[1].split('-')[1]
+if len(sys.argv[1].split('-')) > 1:
+    progname = sys.argv[1].split('-')[0]
+    progclass = sys.argv[1].split('-')[1]+'/'
+else:
+    print('Pasirinkite jau arba vyr')
+    exit(-1)
 version = sys.argv[2]
 
-foldname = os.popen('find . -type d -name "{progname}-{progclass}"'.format(progname=progname, progclass=progclass)).read().replace("\n","")
-print(foldname)
-os.popen('mkdir -p {foldname}/bin && g++ -std=c++11 {foldname}/{progname}-{progclass}_{version}.cpp -o {foldname}/bin/{progname}-{progclass}_{version} && chmod +x {foldname}/bin/{progname}-{progclass}_{version}'.format(foldname=foldname, progname=progname, progclass=progclass, version=version))
-# os.popen('mkdir -p {foldname}/bin && g++ -std=c++11 {foldname}/{progname}-jau_{version}.cpp -o {foldname}/bin/{progname}-jau_{version} && chmod +x {foldname}/bin/{progname}-jau_{version}'.format(foldname=foldname, progname=progname, version=version))
+try:
+    sub.check_call(['find', '.', '-type', 'd', '-wholename', '"*/{progclass}{progname}"'.format(progname=progname, progclass=progclass)])
+except sub.CalledProcessError:
+    print('Error on find')
+
+# try:
+#     sub.check_call([])
+
+foldname = os.popen('find . -type d -wholename "*/{progclass}{progname}"'.format(progname=progname, progclass=progclass))
+foldname = foldname.read().replace('\n', '')
+if foldname == '':
+    exit(-1)
+# print(foldname)
+try:
+    sub.check_call(['mkdir', '-p', '{foldname}/sprendimai/{version}/bin'.format(foldname=foldname, version=version)])
+except sub.CalledProcessError:
+    print('Error on making bin directory')
+    exit(-2)
+
+print(foldname, version)
+try:
+    sub.check_call(['g++ {foldname}/sprendimai/{version}/*.cpp -std=c++11 -o {foldname}/sprendimai/{version}/bin/{progname}'.format(foldname=foldname, progname=progname, version=version)], shell=True)
+except sub.CalledProcessError:
+    print('Error on compilation. No such version')
+    exit(-2)
+
+try:
+    sub.check_call(['chmod', '+x', '{foldname}/sprendimai/{version}/bin/{progname}'.format(foldname=foldname, progname=progname, version=version)])
+except sub.CalledProcessError:
+    print('Error on chmod')
+    exit(-2)
