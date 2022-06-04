@@ -7,7 +7,7 @@ import subprocess as sub
 # year = sys.argv[1]
 if len(sys.argv[1].split('-')) > 1:
     progname = sys.argv[1].split('-')[0]
-    progclass = sys.argv[1].split('-')[1]+'/'
+    progclass = sys.argv[1].split('-')[-1]+'/'
 else:
     print('Pasirinkite jau arba vyr')
     exit(-1)
