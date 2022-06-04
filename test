@@ -3,17 +3,18 @@
 import os
 import sys
 
-# year = sys.argv[1]
-if len(sys.argv[1].split('-')) > 1:
-    progname = sys.argv[1].split('-')[0]
-    progclass = sys.argv[1].split('-')[-1]+'/'
+year = sys.argv[1]
+if len(sys.argv[2].split('-')) > 1:
+    progname = sys.argv[2].split('-')[0]
+    progclass = sys.argv[2].split('-')[-1]+'/'
 else:
     print('Pasirinkite jau arba vyr')
     exit(-1)
-version = sys.argv[2]
+version = sys.argv[3]
+# print(progname, progclass, version)
 
 try:
-    foldname = os.popen('find . -type d -wholename "*/{progclass}{progname}"'.format(progname=progname, progclass=progclass))
+    foldname = os.popen('find . -type d -wholename "./{year}/*/{progclass}{progname}"'.format(progname=progname, progclass=progclass, year=year))
 except IOError:
     print('Error on find')
     exit()
@@ -30,8 +31,8 @@ if testfolder == '':
 
 testno = int(os.popen('ls {testfolder} | wc -l'.format(testfolder=testfolder)).read())//2
 onetest = False
-if len(sys.argv) > 3:
-    testno = int(sys.argv[3])
+if len(sys.argv) > 4:
+    testno = int(sys.argv[4])
     onetest = True
 
 if not onetest:

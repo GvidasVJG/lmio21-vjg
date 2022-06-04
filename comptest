@@ -4,29 +4,30 @@ import sys
 from time import sleep
 from subprocess import call as run
 
-# year = sys.argv[1]
-progname = sys.argv[1]
-version = sys.argv[2]
+year = sys.argv[1]
+progname = sys.argv[2]
+version = sys.argv[3]
 testno = 0
-if len(sys.argv) > 3:
-    testno = int(sys.argv[3])
 
-a = run(['./compile', progname, version])
+if len(sys.argv) > 4:
+    testno = int(sys.argv[4])
+
+a = run(['./compile', year, progname, version])
 
 if a == 255:
-    print('Užduotis nerasta')
+    print('Užduotis kompiliavimui nerasta')
     exit()
 elif a == 254:
     print('Nepavyko sukompiliuoti')
     exit()
 
 if testno > 0:
-    a = run(['./test', progname, version, str(testno)])
+    a = run(['./test', year, progname, version, str(testno)])
 else:
-    a = run(['./test', progname, version])
+    a = run(['./test', year, progname, version])
 
 if a == 255:
-    print('Užduotis nerasta')
+    print('Užduotis testavimui nerasta')
     exit()
 elif a == 254:
     print('Užduotis neturi testų')
