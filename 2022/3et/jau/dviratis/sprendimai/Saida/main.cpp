@@ -4,50 +4,64 @@ using namespace std;
 
 int main()
 {
-    int sum_dienu, sum = 0;
-    //cout << "kiek dienu?: ";
-    cin >> sum_dienu;
+    int dienusk, sum = 0;
+    bool arnamie = true;
 
-    struct prognoze{
-    bool rytas;
-    bool vakaras;
+    cin >> dienusk;
+
+    struct prog{
+    bool rytop;
+    bool vakarop;
     };
+    prog prognoze[dienusk];
 
-    prognoze prog[sum_dienu];
-
-    for (int i = 0; i < sum_dienu; i++){
-
-        /*cout << "rytas: ";*/ cin >> prog[i].rytas;
-        /*cout << "vakaras: ";*/ cin >> prog[i].vakaras;
+    for (int i = 0; i < dienusk; i++){
+        cin >> prognoze[i].rytop >> prognoze[i].vakarop;
     }
-        bool ar_namie = false;
-        bool ar_darbe = false;
 
-    for (int i = 0; i < sum_dienu; i++){
-
-        if (prog[i].rytas == true && prog[i].vakaras == true){
+    for (int i = 0; i < dienusk; i++){
+        if (prognoze[i].rytop == true && prognoze[i].vakarop == true){
             sum++;
-            if(prog[i + 1].vakaras == true){
-                ar_namie = false;
-                ar_darbe = true;
+            if (prognoze[i + 1].rytop == false && prognoze[i + 1].vakarop == true){
+                arnamie = false;
             }
-            else if(prog[i + 1].rytas == true){
-                ar_namie = true;
-                ar_darbe = false;
+            if (prognoze[i + 1].rytop == true && prognoze[i + 1].vakarop == false){
+                arnamie = true;
+            }
+            if (prognoze[i + 1].rytop == true && prognoze[i + 1].vakarop == true){
+                arnamie = true;
+            }
+            if (prognoze[i + 1].rytop == false && prognoze[i + 1].vakarop == false){
+                int j = 1;
+                while (j <= dienusk - i){
+                    if (prognoze[i + j].rytop == false && prognoze[i + j].vakarop == true){
+                        arnamie = false;
+                        break;
+                    }
+                    if (prognoze[i + j].rytop == true && prognoze[i + j].vakarop == false){
+                        arnamie = true;
+                        break;
+                    }
+                    if (prognoze[i + j].rytop == true && prognoze[i + j].vakarop == true){
+                        arnamie = true;
+                        break;
+                    }
+                    else{
+                        j++;
+                    }
+                }
             }
         }
-        else if (prog[i].rytas == true){
-            if (ar_namie == true){
+        else if (prognoze[i].rytop == true && prognoze[i].vakarop == false){
+            if (arnamie == true){
+                arnamie = false;
                 sum++;
-                ar_namie = false;
-                ar_darbe = true;
             }
         }
-        else if (prog[i].vakaras == true){
-            if (ar_darbe == true){
+        else if (prognoze[i].rytop == false && prognoze[i].vakarop == true){
+            if (arnamie == false){
+                arnamie = true;
                 sum++;
-                ar_darbe = false;
-                ar_namie = true;
             }
         }
     }
