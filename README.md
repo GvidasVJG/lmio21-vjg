@@ -1,4 +1,4 @@
-# 2021 LMIO mokyklos etapas - jaunesniųjų grupė
+# LMIO uždaviniai ir sprendimai
 ## Veikimui reikalingos programos
 [Python3](https://www.python.org/download/releases/3.0/)
 
