@@ -21,7 +21,9 @@ int main()
 
     for (int i = 0; i < dienusk; i++){
         if (prognoze[i].rytop == true && prognoze[i].vakarop == true){
-            sum++;
+            if(arnamie){
+                sum++;
+            }
             if (prognoze[i + 1].rytop == false && prognoze[i + 1].vakarop == true){
                 arnamie = false;
             }
