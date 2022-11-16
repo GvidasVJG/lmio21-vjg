@@ -11,6 +11,7 @@ else:
     print('Pasirinkite jau arba vyr')
     exit(-1)
 version = sys.argv[3]
+lang = sys.argv[4]
 # print(progname, progclass, version)
 
 try:
@@ -31,24 +32,46 @@ if testfolder == '':
 
 testno = int(os.popen('ls {testfolder} | wc -l'.format(testfolder=testfolder)).read())//2
 onetest = False
-if len(sys.argv) > 4:
-    testno = int(sys.argv[4])
+if len(sys.argv) > 5:
+    testno = int(sys.argv[5])
     onetest = True
 
-if not onetest:
-    for i in range(testno):
-        no = i+1
-        ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | {foldname}/sprendimai/{version}/bin/{pname}'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
-        sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2), progclass=progclass)).read()
+if lang == 'cpp':
+    if not onetest:
+        for i in range(testno):
+            no = i+1
+            ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | {foldname}/sprendimai/{version}/bin/{pname}'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+            sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2), progclass=progclass)).read()
 
-        if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
-            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-        else:
-            print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
-else:
-    ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | {foldname}/sprendimai/{version}/bin/{pname}'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
-    sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2), progclass=progclass)).read()
-    if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
-        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+            if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+                print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+            else:
+                print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
     else:
-        print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+        ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | {foldname}/sprendimai/{version}/bin/{pname}'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+        sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2), progclass=progclass)).read()
+        if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+            print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+        else:
+            print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+elif lang == 'py':
+    if not os.path.exists(f'{foldname}/sprendimai/{version}/{progname}.py'):
+        print('Python file not found')
+        exit()
+    if not onetest:
+        for i in range(testno):
+            no = i+1
+            ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | python3 {foldname}/sprendimai/{version}/{pname}.py'.format(testfolder=testfolder, testno=str(no).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+            sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(no).zfill(2), progclass=progclass)).read()
+
+            if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+                print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+            else:
+                print('Test #' + str(no).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')
+    else:
+        ans = os.popen('cat {testfolder}/*.{testno}[p\-.]*in | python3 {foldname}/sprendimai/{version}/{pname}.py'.format(testfolder=testfolder, testno=str(testno).zfill(2), pname=progname, version=version, foldname=foldname, progclass=progclass)).read()
+        sol = os.popen('cat {testfolder}/*.{testno}[p\-.]*sol'.format(testfolder=testfolder, pname=progname, testno=str(testno).zfill(2), progclass=progclass)).read()
+        if str(ans).replace("\n", "") == str(sol).replace("\n", ""):
+            print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+        else:
+            print('Test #' + str(testno).zfill(2) + ' ' + '\x1b[6;30;41m' + 'Failed' + '\x1b[0m')

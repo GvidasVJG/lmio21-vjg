@@ -7,24 +7,29 @@ from subprocess import call as run
 year = sys.argv[1]
 progname = sys.argv[2]
 version = sys.argv[3]
+lang = 'cpp'
 testno = 0
 
 if len(sys.argv) > 4:
-    testno = int(sys.argv[4])
+    lang = sys.argv[4]
 
-a = run(['./compile', year, progname, version])
+if len(sys.argv) > 5:
+    testno = int(sys.argv[5])
 
-if a == 255:
-    print('Užduotis kompiliavimui nerasta')
-    exit()
-elif a == 254:
-    print('Nepavyko sukompiliuoti')
-    exit()
+if lang == 'cpp':
+    a = run(['./compile', year, progname, version])
+
+    if a == 255:
+        print('Užduotis kompiliavimui nerasta')
+        exit()
+    elif a == 254:
+        print('Nepavyko sukompiliuoti')
+        exit()
 
 if testno > 0:
-    a = run(['./test', year, progname, version, str(testno)])
+    a = run(['./test', year, progname, version, lang, str(testno)])
 else:
-    a = run(['./test', year, progname, version])
+    a = run(['./test', year, progname, version, lang])
 
 if a == 255:
     print('Užduotis testavimui nerasta')
